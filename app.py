@@ -9,7 +9,7 @@ Created on Mon Jun  3 15:27:15 2024
 import os
 import streamlit as st
 from langchain_groq import ChatGroq
-
+from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
@@ -29,7 +29,7 @@ groq_api_key = os.getenv("GROQ_API_KEY")
 os.environ['GOOGLE_API_KEY']=os.getenv("GOOGLE_API_KEY")
 
 
-st.title("Gemma")
+st.title("PDF Q&A app using Gemma")
 
 llm = ChatGroq(groq_api_key=groq_api_key,model_name="Gemma-7B-it")
 
@@ -52,6 +52,8 @@ def vector_embedding():
     
     if "vectors" not in st.session_state:
         st.session_state.embeddings=GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        
+        
         st.session_state.loader=PyPDFDirectoryLoader("./pdfs")
         st.session_state.docs=st.session_state.loader.load()
         st.session_state.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024,chunk_overlap=128)
@@ -59,15 +61,18 @@ def vector_embedding():
         st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs)
         st.session_state.vectors = FAISS.from_documents(st.session_state.final_documents, st.session_state.embeddings)
         
-        
+
+
+if st.button("Fetch all data from PDF"):
+    vector_embedding()
+    st.write("Vector Store DB is ready!")
+
         
 
-prompt1 = st.text_input("Enter what you wanna know from the doc?"
+prompt1 = st.text_input("What do you wanna know from the document?"
                     )
 
-if st.button("Creating Vector Store"):
-    vector_embedding()
-    st.write("Vector Store DB is readyyy")
+
     
     
 import time
