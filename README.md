@@ -22,7 +22,7 @@ The PDF Q&A App leverages advanced AI models to provide insightful answers to qu
 * Installation
 
 ### Clone the Repository:
-git clone https://github.com/yourusername/PDF_QA_App.git
+git clone https://github.com/pavi2803/PDF_question_answer_app.git
 cd PDF_QA_App
 
 ### Install Dependencies:
