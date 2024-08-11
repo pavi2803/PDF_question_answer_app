@@ -53,9 +53,18 @@ def vector_embedding():
     if "vectors" not in st.session_state:
         st.session_state.embeddings=GoogleGenerativeAIEmbeddings(model="models/embedding-001")
         
-        
-        st.session_state.loader=PyPDFDirectoryLoader("./pdfs")
-        st.session_state.docs=st.session_state.loader.load()
+        uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
+
+        if uploaded_file is not None:
+            # Save the uploaded file to a temporary location
+            with open("uploaded_temp.pdf", "wb") as f:
+                f.write(uploaded_file.read())
+            
+            # Initialize your loader with the temporary file path
+            st.session_state.loader = PyPDFDirectoryLoader("uploaded_temp.pdf")
+            st.session_state.docs = st.session_state.loader.load()
+        @st.session_state.loader=PyPDFDirectoryLoader("./pdfs")
+        @st.session_state.docs=st.session_state.loader.load()
         st.session_state.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024,chunk_overlap=128)
         
         st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs)
