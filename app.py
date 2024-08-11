@@ -63,8 +63,7 @@ def vector_embedding():
             # Initialize your loader with the temporary file path
             st.session_state.loader = PyPDFDirectoryLoader("uploaded_temp.pdf")
             st.session_state.docs = st.session_state.loader.load()
-        @st.session_state.loader=PyPDFDirectoryLoader("./pdfs")
-        @st.session_state.docs=st.session_state.loader.load()
+        
         st.session_state.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024,chunk_overlap=128)
         
         st.session_state.final_documents=st.session_state.text_splitter.split_documents(st.session_state.docs)
